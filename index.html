@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tyler Allen — Engineering Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --bg-card: #161616;
+      --border: #2a2a2a;
+      --text: #e8e6e3;
+      --text-muted: #8a8a8a;
+      --accent: #d4843e;
+      --accent-dim: rgba(212, 132, 62, 0.12);
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Source Serif 4', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--accent); color: var(--bg); }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(14,14,14,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .logo {
+      font-family: var(--mono); font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+    }
+    nav .links { display: flex; gap: 1.8rem; }
+    nav .links a {
+      font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav .links a:hover { color: var(--accent); }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px; background: var(--text-muted);
+      margin: 5px 0; transition: 0.3s;
+    }
+    .mobile-menu {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(14,14,14,0.97); z-index: 99;
+      flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--mono); font-size: 1.1rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-muted); text-decoration: none;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--bg) 0%, transparent 50%, rgba(14,14,14,0.5) 100%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+    .hero h1 {
+      font-family: var(--mono); font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero .tagline {
+      font-family: var(--serif); font-style: italic; font-size: 1.15rem;
+      color: var(--text-muted); max-width: 600px; margin-bottom: 1.5rem; line-height: 1.6;
+    }
+    .hero .meta {
+      font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted);
+      letter-spacing: 0.05em; display: flex; gap: 2rem; flex-wrap: wrap;
+    }
+    .hero .meta a { color: var(--accent); text-decoration: none; }
+    .hero .meta a:hover { text-decoration: underline; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: var(--mono); font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700; letter-spacing: -0.01em; margin-bottom: 1.5rem; line-height: 1.2;
+    }
+    .section-prose {
+      font-family: var(--serif); font-size: 1.05rem; color: var(--text-muted);
+      max-width: 680px; line-height: 1.75;
+    }
+    .section-prose strong { color: var(--text); font-weight: 600; }
+
+    .divider { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+    .divider hr { border: none; height: 1px; background: var(--border); }
+
+    /* PROJECT SECTIONS */
+    .project { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .project-role {
+      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem;
+    }
+    .project-name {
+      font-family: var(--mono); font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700; line-height: 1.15; margin-bottom: 0.8rem;
+    }
+    .project-org { font-family: var(--sans); font-size: 0.9rem; color: var(--text-muted); }
+    .project-body {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      margin-top: 2rem; margin-bottom: 2.5rem;
+    }
+    .project-description {
+      font-family: var(--serif); font-size: 1rem; color: var(--text-muted); line-height: 1.75;
+    }
+    .project-description strong { color: var(--text); font-weight: 600; }
+    .project-highlights { display: flex; flex-direction: column; gap: 0.8rem; }
+    .highlight {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+      padding: 1rem 1.2rem; font-family: var(--mono); font-size: 0.78rem;
+      color: var(--text-muted); line-height: 1.55;
+    }
+    .highlight .hl-label {
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em;
+      font-size: 0.68rem; margin-bottom: 0.3rem;
+    }
+    .highlight .hl-value { color: var(--text); }
+
+    /* MEDIA */
+    .media-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem; margin-top: 1rem;
+    }
+    .media-grid.trio { grid-template-columns: repeat(3, 1fr); }
+    .media-grid.duo { grid-template-columns: 1fr 1fr; }
+    .media-grid.single { grid-template-columns: 1fr; max-width: 640px; }
+    .media-item {
+      position: relative; border-radius: 6px; overflow: hidden;
+      border: 1px solid var(--border); background: var(--bg-card);
+    }
+    .media-item img {
+      width: 100%; height: auto; display: block;
+    }
+    .media-item video {
+      width: 100%; display: block; background: #000;
+    }
+    .media-caption {
+      padding: 0.6rem 0.8rem; font-family: var(--mono); font-size: 0.68rem;
+      color: var(--text-muted); letter-spacing: 0.04em; background: var(--bg-card);
+    }
+
+    /* CALLOUT */
+    .callout {
+      margin-top: 2rem; padding: 1.2rem 1.5rem;
+      background: var(--accent-dim); border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+    }
+    .callout-label {
+      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem;
+    }
+    .callout p {
+      font-family: var(--serif); font-size: 0.95rem; color: var(--text-muted); line-height: 1.65;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .skill-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+      padding: 1.4rem; transition: border-color 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent); }
+    .skill-card h3 {
+      font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem;
+    }
+    .skill-card .tools { font-family: var(--sans); font-size: 0.9rem; color: var(--text); margin-bottom: 0.5rem; }
+    .skill-card .context { font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); }
+
+    /* FOOTER */
+    footer {
+      padding: 4rem 2rem; max-width: 1100px; margin: 0 auto;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 2rem;
+    }
+    footer h2 { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    footer p { font-family: var(--serif); font-size: 0.95rem; color: var(--text-muted); }
+    footer .footer-links { display: flex; gap: 1.5rem; }
+    footer .footer-links a {
+      font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--accent); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav .links { display: none; }
+      .hamburger { display: block; }
+      .project-body { grid-template-columns: 1fr; }
+      .media-grid.trio { grid-template-columns: 1fr; }
+      .media-grid.duo { grid-template-columns: 1fr; }
+      section, .project { padding: 3rem 1.2rem; }
+      .hero { padding: 2rem 1.2rem 3rem; }
+    }
+    @media (min-width: 769px) {
+      .hamburger { display: none; }
+    }
+
+    /* ANIMATIONS */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Tyler Allen</div>
+  <div class="links">
+    <a href="#about">About</a>
+    <a href="#kiwi">UAV Kiwi</a>
+    <a href="#frc">FRC 5199</a>
+    <a href="#cosmos">COSMOS</a>
+    <a href="#fpv">FPV Build</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+  <a href="#about" onclick="this.parentElement.classList.remove('open')">About</a>
+  <a href="#kiwi" onclick="this.parentElement.classList.remove('open')">UAV Kiwi</a>
+  <a href="#frc" onclick="this.parentElement.classList.remove('open')">FRC 5199</a>
+  <a href="#cosmos" onclick="this.parentElement.classList.remove('open')">COSMOS</a>
+  <a href="#fpv" onclick="this.parentElement.classList.remove('open')">FPV Build</a>
+  <a href="#skills" onclick="this.parentElement.classList.remove('open')">Skills</a>
+  <a href="#contact" onclick="this.parentElement.classList.remove('open')">Contact</a>
+</div>
+
+<!-- ============================================ -->
+<!-- HERO -->
+<!-- ============================================ -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <!-- FILE: kiwi-runway.jpg -->
+    <img src="media/kiwi-runway.jpg" alt="UAV Kiwi on the runway before flight testing">
+  </div>
+  <div class="hero-content fade-in">
+    <h1>Tyler <span>Allen</span></h1>
+    <p class="tagline">I find what's not working in a system and build the fix — whether it's a tilt-rotor mount, a team's operations pipeline, or a post-crash diagnostic workflow.</p>
+    <div class="meta">
+      <span>Mechanical Engineering — Purdue University</span>
+      <a href="mailto:25allentm@gmail.com">25allentm@gmail.com</a>
+      <a href="https://linkedin.com/in/tylerallenengr/" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- ABOUT -->
+<!-- ============================================ -->
+<section id="about">
+  <div class="fade-in">
+    <p class="section-label">About</p>
+    <h2 class="section-title">Systems thinker.<br>Mechanism designer.<br>Team optimizer.</h2>
+    <p class="section-prose">
+      I'm a rising sophomore Mechanical Engineering student at Purdue University, originally from Southern California. My path started with competitive robotics in high school, moved into autonomous vehicles at UCSD's COSMOS program, and now I'm designing flight-critical hardware for a custom VTOL UAV at Purdue.
+    </p>
+    <br>
+    <p class="section-prose">
+      A theme you'll notice across these projects: <strong>I tend to end up at the boundary between systems</strong> — mechanical and software, design and operations, my subsystem and the one next to it. On my FRC team, that meant restructuring how 48 people coordinated across sub-teams and rebuilding fundraising operations from the ground up. On Purdue's Aerial Robotics Team, it meant going beyond my propulsion subsystem role to parse flight logs and diagnose a system-level crash. That boundary is where the interesting problems live, and it's where I do my best work.
+    </p>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ============================================ -->
+<!-- PROJECT: UAV KIWI -->
+<!-- ============================================ -->
+<div class="project" id="kiwi">
+  <div class="fade-in">
+    <div class="project-role">R&D Mechanisms — Propulsion Subsystem Lead</div>
+    <h2 class="project-name">UAV Kiwi</h2>
+    <p class="project-org">Aerial Robotics Team, Purdue University &middot; Sept 2025 – Present</p>
+  </div>
+
+  <div class="project-body fade-in">
+    <div class="project-description">
+      <p>
+        Kiwi is a custom VTOL tricopter tiltrotor UAV, designed and built from scratch by the R&D division of Purdue's Aerial Robotics Team. As Propulsion Subsystem Lead, I was the <strong>sole designer of the tilt-rotor mechanism</strong> for both forward motors and the static rear motor mount.
+      </p>
+      <br>
+      <p>
+        The design challenge was packaging a tilt-rotor assembly that could route high-current ESC and battery wiring within tight spatial and mass constraints, while minimizing moving parts to reduce failure points. I used <strong>parametric SolidWorks CAD</strong> to maintain tight tolerances across the assembly and make iteration fast when constraints shifted. Every design decision was driven by the question: what's the simplest mechanism that still meets the load, clearance, and range-of-motion requirements?
+      </p>
+      <br>
+      <p>
+        I performed <strong>static load testing</strong> on all designed components to verify structural integrity under expected operational loads before flight testing. I also worked directly with the avionics team to resolve system-level hardware integration issues, making sure the mechanical assemblies played nicely with the electronics they were carrying.
+      </p>
+    </div>
+    <div class="project-highlights">
+      <div class="highlight">
+        <div class="hl-label">Scope</div>
+        <div class="hl-value">Sole designer — both forward tilt-rotor assemblies and static rear motor mount for a tricopter VTOL UAV</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">Constraints</div>
+        <div class="hl-value">Mass budget, aerodynamic packaging, wiring clearance for high-current ESCs, tilt servo range of motion, structural loads during hover-to-forward-flight transition</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">Tools</div>
+        <div class="hl-value">SolidWorks (parametric CAD), Bambu Labs 3D printing, static load testing, ArduPilot DataFlash log analysis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIWI MEDIA -->
+  <div class="media-grid trio fade-in">
+    <div class="media-item">
+      <!-- FILE: tiltrotor-cad.png -->
+      <img src="media/tiltrotor-cad.png" alt="Tilt-rotor mechanism CAD assembly view">
+      <div class="media-caption">Tilt-rotor mechanism — assembled view</div>
+    </div>
+    <div class="media-item">
+      <!-- FILE: tiltrotor-cad-exploded.png -->
+      <img src="media/tiltrotor-cad-exploded.png" alt="Tilt-rotor mechanism exploded CAD view">
+      <div class="media-caption">Exploded view — individual components and fasteners</div>
+    </div>
+    <div class="media-item">
+      <!-- FILE: me.jpeg -->
+      <img src="media/me.jpg" alt="Tyler Allen standing with Kiwi">
+      <div class="media-caption">Kiwi and I</div>
+    </div>
+  </div>
+
+  <!-- FLIGHT TEST VIDEO -->
+  <div class="media-grid single fade-in" style="margin-top: 1rem;">
+    <div class="media-item">
+      <!-- FILE: kiwi-flight.mp4 -->
+      <video src="media/output.mp4" controls preload="metadata" poster="media/kiwi-runway.jpg"></video>
+      <div class="media-caption">Stabilized footage from Kiwi flight testing</div>
+    </div>
+  </div>
+
+  <!-- CRASH ANALYSIS CALLOUT -->
+  <div class="callout fade-in">
+    <div class="callout-label">Beyond My Subsystem — Crash Investigation</div>
+    <p>
+      After a flight test ended in a crash, I took it on myself to figure out what went wrong. I parsed raw ArduPilot DataFlash binary logs across two flights and traced the root cause to <strong>uncompensated compass interference</strong> from motor current. All three compasses were internal to the CubeBlack with no motor compensation configured. During the VTOL takeoff, peak hover current caused compass innovation to spike to 14 at motor spin-up and never recover. With no in-flight compass learning and no GPS heading fallback, the EKF lost its yaw source entirely and began integrating gyros only. The two attitude estimators diverged to 180° apart, and when the EKF attempted a yaw reset, the controller saw a 177° roll error in a single timestep and slammed full correction — that was the moment it was over. I then compared against a previous successful flight that used a horizontal takeoff, showing the same bad compass data was present but never triggered the failure because motor current stayed low during the compass-critical phase. Same airframe, same firmware, different outcome — entirely explained by takeoff profile. This wasn't part of my role as propulsion lead. It was a just a problem that needed solving.
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- ============================================ -->
+<!-- PROJECT: FRC 5199 -->
+<!-- ============================================ -->
+<div class="project" id="frc">
+  <div class="fade-in">
+    <div class="project-role">Vice President &middot; Mechanical Lead &middot; Department Lead, Business Operations</div>
+    <h2 class="project-name">FRC Team 5199</h2>
+    <p class="project-org">Capistrano Unified School District &middot; Aug 2021 – May 2025</p>
+  </div>
+
+  <div class="project-body fade-in">
+    <div class="project-description">
+      <p>
+        I served as Vice President and lead mechanical designer for a 48-person FIRST Robotics Competition team, guiding the team to the <strong>FRC World Championship</strong> while earning team MVP. Our robot won the <strong>Excellence in Engineering Award</strong>, the <strong>Quality Award</strong>, and a <strong>Regional Championship</strong>.
+      </p>
+      <br>
+      <p>
+        My technical focus was on mechanism design using <strong>Onshape CAD</strong>, but what set my contribution apart was how I operated at the boundary between sub-teams. I worked directly with the programming team to ensure that every mechanism I designed could be reliably controlled — that sensor placements made sense, that tolerances were tight enough for the control loops to work, and that mechanical assemblies didn't create problems that software would have to paper over.
+      </p>
+      <br>
+      <p>
+        On the operations side, I managed a department of eight students responsible for fundraising and outreach. We raised <strong>over $200,000</strong> through grant campaigns and community outreach, and organized events at elementary and middle schools and Women in STEM programs. I didn't just run the existing playbook — I restructured how the department pursued grants and coordinated outreach to make the pipeline more repeatable and less dependent on any single person.
+      </p>
+    </div>
+    <div class="project-highlights">
+      <div class="highlight">
+        <div class="hl-label">Results</div>
+        <div class="hl-value">FRC World Championship, team MVP, Excellence in Engineering Award, Quality Award, Regional Championship</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">Design Focus</div>
+        <div class="hl-value">Mechanism design in Onshape CAD with deliberate cross-functional integration — every mechanism designed for reliable sensor and control system compatibility</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">Team Scale</div>
+        <div class="hl-value">48-person team, 8-person department under my direct management, $200K+ raised across outreach and grant campaigns</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRC MEDIA -->
+  <div class="media-grid trio fade-in">
+    <div class="media-item">
+      <!-- FILE: frc-cad.png -->
+      <img src="media/frc-cad.png" alt="FRC robot mechanism CAD render in Onshape">
+      <div class="media-caption">Mechanism CAD in Onshape</div>
+    </div>
+    <div class="media-item">
+      <!-- FILE: frc-action.jpg -->
+      <img src="media/frc-action.jpg" alt="FRC robot in competition">
+      <div class="media-caption">Competition action at regionals</div>
+    </div>
+    <div class="media-item">
+      <!-- FILE: frc-pits.jpg -->
+      <img src="media/frc-pits.jpg" alt="Tyler working in the FRC pits">
+      <div class="media-caption">Working in the pits between matches</div>
+    </div>
+  </div>
+
+  <!-- FRC ACTION VIDEO -->
+  <div class="media-grid single fade-in" style="margin-top: 1rem;">
+    <div class="media-item">
+      <!-- FILE: frc-action.mp4 -->
+      <video src="media/frc-action.mp4" controls preload="metadata"></video>
+      <div class="media-caption">Robot in action during match play</div>
+    </div>
+  </div>
+
+  <div class="callout fade-in">
+    <div class="callout-label">The Optimization Pattern</div>
+    <p>
+      When I joined Team 5199 as a sophomore, the mechanical and programming sub-teams operated mostly in parallel — designs would get thrown over the wall and problems surfaced late. By the time I was VP, cross-team integration was a deliberate part of our process. I made it standard practice for mechanism designers to sit with programmers during control system development. The same instinct applied to operations: I rebuilt the fundraising pipeline so it didn't collapse when one person graduated. Both were the same kind of problem — a system that worked but had a single point of failure — and both needed the same kind of fix.
+    </p>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- ============================================ -->
+<!-- PROJECT: COSMOS USV -->
+<!-- ============================================ -->
+<div class="project" id="cosmos">
+  <div class="fade-in">
+    <div class="project-role">Participant — COSMOS Cluster 7</div>
+    <h2 class="project-name">Autonomous Surface Vehicle</h2>
+    <p class="project-org">UCSD COSMOS, Jacobs School of Engineering &middot; August 2024</p>
+  </div>
+
+  <div class="project-body fade-in">
+    <div class="project-description">
+      <p>
+        With a team of four, I built an autonomous surface vehicle designed to survey lake health by collecting pH, temperature, and GPS data at programmed waypoints. The project addressed ocean acidification monitoring: we equipped a body board with thrusters and a sensor array, then programmed it to autonomously navigate a predefined route while streaming environmental data back to shore in real time.
+      </p>
+      <br>
+      <p>
+        The USV was split into two electrically isolated subsystems. The <strong>data subsystem</strong> used an Adafruit Metro M4 microcontroller to collect readings from an analog pH sensor and a digital temperature sensor, then transmitted formatted data strings over a <strong>LoRa telemetry radio</strong> via serial TX/RX to a base station running a SQLite database. The <strong>control subsystem</strong> ran a Kakute H743 flight controller paired with an M80 Pro GPS, configured through <strong>ArduPilot Mission Planner</strong> with autonomous waypoint navigation.
+      </p>
+      <br>
+      <p>
+        We designed all mounting hardware in <strong>Onshape</strong>, then laser-cut and 3D-printed the parts. After initial testing revealed interference between subsystems, we iterated to a removable multi-tiered mounting design that physically isolated the data electronics on an upper layer. Testing at Lake Miramar, we successfully collected correlated pH and temperature data and confirmed autonomous waypoint tracking.
+      </p>
+    </div>
+    <div class="project-highlights">
+      <div class="highlight">
+        <div class="hl-label">Architecture</div>
+        <div class="hl-value">Two isolated subsystems — Data (Metro M4 → pH + temp sensors → LoRa → SQLite) and Controls (Kakute H743 + M80 Pro GPS → ArduPilot waypoints)</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">Key Finding</div>
+        <div class="hl-value">Positive correlation between water temperature and pH levels across collection points at Lake Miramar</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">Tools</div>
+        <div class="hl-value">Onshape CAD, ArduPilot Mission Planner, Arduino (Metro M4), LoRa radio, laser cutter, 3D printing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COSMOS MEDIA -->
+  <div class="media-grid duo fade-in">
+    <div class="media-item">
+      <!-- FILE: cosmos-build.jpg -->
+      <img src="media/cosmos-build.png" alt="COSMOS USV electronics and build">
+      <div class="media-caption">USV electronics integration and sensor array</div>
+    </div>
+    <div class="media-item">
+      <!-- FILE: cosmos-test.mp4 -->
+      <video src="media/cosmos-test.mp4" controls preload="metadata"></video>
+      <div class="media-caption">Autonomous waypoint navigation test</div>
+    </div>
+  </div>
+
+  <div class="callout fade-in">
+    <div class="callout-label">Where I Stepped In</div>
+    <p>
+      On a team of four, I gravitated toward the integration layer — configuring the ArduPilot flight controller, tuning the autonomous waypoint navigation, and debugging the LoRa telemetry link when we hit transmission issues caused by incorrect power settings. This was also my first time isolating electrical subsystems to prevent interference, a lesson that directly informed how I think about wiring and packaging on UAV Kiwi.
+    </p>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- ============================================ -->
+<!-- PROJECT: FPV QUAD -->
+<!-- ============================================ -->
+<div class="project" id="fpv">
+  <div class="fade-in">
+    <div class="project-role">Solo Build</div>
+    <h2 class="project-name">Custom 5" FPV Quadcopter</h2>
+    <p class="project-org">Personal Project &middot; July – August 2025</p>
+  </div>
+
+  <div class="project-body fade-in">
+    <div class="project-description">
+      <p>
+        I engineered a 5-inch propeller FPV racing drone from component selection through final flight tuning. This was a solo build — no team, no instructor, just datasheets and forums. I selected and integrated <strong>ESCs, a power distribution system, flight controller, and FPV camera/VTX stack</strong>, then performed PID tuning and sensor calibration to achieve stable, responsive flight dynamics.
+      </p>
+      <br>
+      <p>
+        This project taught me more about flight dynamics than anything I'd read in a textbook. Feeling the difference between a well-tuned and poorly-tuned PID loop through the sticks gave me an intuitive understanding of control response that directly translates to the work I do now on UAV Kiwi. When I'm designing propulsion mounts and thinking about vibration isolation or motor placement, I'm drawing on what I learned watching this quad oscillate, wobble, and eventually fly clean.
+      </p>
+    </div>
+    <div class="project-highlights">
+      <div class="highlight">
+        <div class="hl-label">Scope</div>
+        <div class="hl-value">End-to-end solo build — component selection, wiring, power distribution, ESC integration, FC configuration, PID tuning, FPV setup</div>
+      </div>
+      <div class="highlight">
+        <div class="hl-label">What It Taught Me</div>
+        <div class="hl-value">Hands-on understanding of PID control response, motor dynamics, and the relationship between physical build quality and flight stability</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FPV MEDIA -->
+  <div class="media-grid single fade-in">
+    <div class="media-item">
+      <!-- FILE: drone-build.jpg -->
+      <img src="media/drone-build.jpg" alt="Custom FPV quadcopter build">
+      <div class="media-caption">5" FPV quad — completed build with electronics stack</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- ============================================ -->
+<!-- SKILLS -->
+<!-- ============================================ -->
+<section id="skills">
+  <div class="fade-in">
+    <p class="section-label">Skills & Tools</p>
+    <h2 class="section-title">What I work with</h2>
+  </div>
+
+  <div class="skills-grid fade-in">
+    <div class="skill-card">
+      <h3>CAD & Design</h3>
+      <div class="tools">Onshape (expert), SolidWorks (proficient)</div>
+      <div class="context">FRC robot mechanisms → UAV Kiwi tilt-rotor assemblies → COSMOS mounting hardware</div>
+    </div>
+    <div class="skill-card">
+      <h3>Prototyping & Fabrication</h3>
+      <div class="tools">Bambu Labs 3D printers, CNC mill (manual + Haas), laser cutter, bandsaw, drill press, rotary sander</div>
+      <div class="context">Every project — from 3D-printed sensor mounts to CNC-machined robot parts</div>
+    </div>
+    <div class="skill-card">
+      <h3>Flight Systems</h3>
+      <div class="tools">ArduPilot, Mission Planner, PID tuning, flight controller configuration, IMU & GPS integration</div>
+      <div class="context">UAV Kiwi crash analysis → COSMOS autonomous waypoints → FPV quad tuning</div>
+    </div>
+    <div class="skill-card">
+      <h3>Electronics & Integration</h3>
+      <div class="tools">Soldering, Molex crimping, Arduino, ESC integration, LoRa radio, serial communication</div>
+      <div class="context">COSMOS sensor array → FPV power distribution → FRC sensor-mechanism integration</div>
+    </div>
+    <div class="skill-card">
+      <h3>Software & Analysis</h3>
+      <div class="tools">Python, MATLAB, Excel, ArduPilot DataFlash log parsing</div>
+      <div class="context">Flight log crash analysis, data collection and visualization, engineering calculations</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- ============================================ -->
+<!-- CONTACT -->
+<!-- ============================================ -->
+<footer id="contact">
+  <div>
+    <h2>Let's talk.</h2>
+    <p>Open to internships, research, and interesting problems.</p>
+    <p style="margin-top: 0.3rem;">San Clemente, CA &middot; West Lafayette, IN</p>
+  </div>
+  <div class="footer-links">
+    <a href="mailto:25allentm@gmail.com">Email</a>
+    <a href="https://linkedin.com/in/tylerallenengr/" target="_blank">LinkedIn</a>
+    <a href="media/Tyler_Allen_Resume.pdf" target="_blank">Resume</a>
+  </div>
+</footer>
+
+<!-- SCROLL ANIMATION -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
